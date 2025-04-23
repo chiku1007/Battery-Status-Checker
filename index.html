@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Battery Status Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: linear-gradient(to right, #ece9e6, #ffffff);
+    }
+    .battery-status {
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      display: inline-block;
+      background-color: #f9f9f9;
+      box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+    }
+    .status-text {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    .charging {
+      color: green;
+    }
+    .not-charging {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="battery-status">
+    <h2>🔋 Battery Status Checker</h2>
+    <div id="level" class="status-text">Battery Level: --%</div>
+    <div id="charging" class="status-text">Charging Status: --</div>
+  </div>
+
+  <script>
+    navigator.getBattery().then(function(battery) {
+      function updateBatteryStatus() {
+        document.getElementById("level").textContent = 
+          "Battery Level: " + Math.round(battery.level * 100) + "%";
+
+        document.getElementById("charging").textContent = 
+          "Charging Status: " + (battery.charging ? "Plugged In 🔌" : "Not Plugged In ❌");
+
+        document.getElementById("charging").className = 
+          "status-text " + (battery.charging ? "charging" : "not-charging");
+      }
+
+      // Initial call
+      updateBatteryStatus();
+
+      // Add event listeners to auto update
+      battery.addEventListener("levelchange", updateBatteryStatus);
+      battery.addEventListener("chargingchange", updateBatteryStatus);
+    });
+  </script>
+
+</body>
+</html>
